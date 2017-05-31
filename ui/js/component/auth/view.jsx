@@ -5,9 +5,9 @@ import Modal from "component/modal";
 import ModalPage from "component/modal-page";
 import Link from "component/link"
 import RewardLink from 'component/rewardLink';
-import {FormRow} from "../component/form.js";
-import {CreditAmount, Address} from "../component/common.js";
-import {getLocal, setLocal} from '../utils.js';
+import {FormRow} from "component/form.js";
+import {CreditAmount, Address} from "component/common";
+import {getLocal, setLocal} from 'utils.js';
 import rewards from 'rewards'
 
 class SubmitEmailStage extends React.Component {
