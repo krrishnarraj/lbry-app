@@ -1,15 +1,14 @@
 import React from "react";
-import lbry from "../lbry.js";
-import lbryio from "../lbryio.js";
-import Modal from "./modal.js";
-import ModalPage from "./modal-page.js";
+import lbry from "lbry";
+import lbryio from "lbryio";
+import Modal from "component/modal";
+import ModalPage from "component/modal-page";
 import Link from "component/link"
-import {RewardLink} from 'component/reward-link';
+import RewardLink from 'component/rewardLink';
 import {FormRow} from "../component/form.js";
 import {CreditAmount, Address} from "../component/common.js";
 import {getLocal, setLocal} from '../utils.js';
-import rewards from '../rewards'
-
+import rewards from 'rewards'
 
 class SubmitEmailStage extends React.Component {
   constructor(props) {
@@ -135,7 +134,7 @@ class WelcomeStage extends React.Component {
     super(props);
 
     this.state = {
-      hasReward: false,
+      hasReward: true,
       rewardAmount: null,
     };
   }
@@ -148,8 +147,16 @@ class WelcomeStage extends React.Component {
   }
 
   render() {
+    const {
+      claimedRewardsByType,
+    } = this.props
+
+    const hasReward = claimedRewardsByType.length > 0
+
+    if (fetching) return null
+
     return (
-      !this.state.hasReward ?
+      !hasReward ?
         <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY" {...this.props}>
           <section>
             <h3 className="modal__header">Welcome to LBRY.</h3>
@@ -165,7 +172,6 @@ class WelcomeStage extends React.Component {
          <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={() => { this.props.setStage(null) }}>
           <section>
             <h3 className="modal__header">About Your Reward</h3>
-            <p>You earned a reward of <CreditAmount amount={this.state.rewardAmount} label={false} /> LBRY credits, or <em>LBC</em>.</p>
             <p>This reward will show in your Wallet momentarily, probably while you are reading this message.</p>
             <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
             <p>No need to understand it all just yet! Try watching or downloading something next.</p>
@@ -251,7 +257,7 @@ class CodeRequiredStage extends React.Component {
 }
 
 
-export class AuthOverlay extends React.Component {
+class AuthOverlay extends React.Component {
   constructor(props) {
     super(props);
 
@@ -286,6 +292,7 @@ export class AuthOverlay extends React.Component {
           this.setStage("email", {})
         }
       } else {
+<<<<<<< HEAD:ui/js/component/auth.js
         lbryio.call('reward', 'list', {}).then((userRewards) => {
           userRewards.filter(function(reward) {
             return reward.reward_type == rewards.TYPE_NEW_USER && reward.transaction_id;
@@ -293,6 +300,12 @@ export class AuthOverlay extends React.Component {
              this.setStage(null) :
              this.setStage("welcome")
         });
+=======
+        const {
+          claimedRewardsByType,
+        } = this.props
+        claimedRewardsByType[rewards.TYPE_NEW_USER] ? this.setStage(null) : this.setStage("welcome")
+>>>>>>> 1dce25fcf1c8304c525423e327db8fb881a6e155:ui/js/component/auth/view.jsx
       }
     }).catch((err) => {
       this.setStage("error", { errorText: err.message })
@@ -319,9 +332,11 @@ export class AuthOverlay extends React.Component {
       this.state.stage != "welcome" ?
           <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication">
             <h1>LBRY Early Access</h1>
-            <StageContent {...this.state.stageProps}  setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} />
+            <StageContent {...this.props} {...this.state.stageProps}  setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} />
           </ModalPage> :
-          <StageContent setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} {...this.state.stageProps}  />
+          <StageContent {...this.props} setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} {...this.state.stageProps}  />
     );
   }
 }
+
+export default AuthOverlay
