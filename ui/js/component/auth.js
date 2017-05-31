@@ -18,6 +18,7 @@ class SubmitEmailStage extends React.Component {
     this.state = {
       rewardType: null,
       email: '',
+      showNoEmailConfirm: false,
       submitting: false
     };
   }
@@ -30,6 +31,15 @@ class SubmitEmailStage extends React.Component {
 
   onEmailSaved(email) {
     this.props.setStage("confirm", { email: email })
+  }
+
+  onEmailSkipClick() {
+    this.setState({ showNoEmailConfirm: true })
+  }
+
+  onEmailSkipConfirm() {
+    setLocal('auth_bypassed', true);
+    this.props.setStage(null)
   }
 
   handleSubmit(event) {
@@ -58,9 +68,17 @@ class SubmitEmailStage extends React.Component {
           <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="scrwvwls@lbry.io"
                      name="email" value={this.state.email}
                      onChange={(event) => { this.handleEmailChanged(event) }} />
-          <div className="form-row-submit">
+          <div className="form-row-submit form-row-submit--with-footer">
             <Link button="primary" label="Next" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event) }} />
           </div>
+          { this.state.showNoEmailConfirm ?
+            <div>
+              <p className="help form-input-width">If you continue without an email, you will be ineligible to earn free LBC rewards, as well as unable to receive security related communications.</p>
+              <Link className="button-text-help" onClick={ () => { this.onEmailSkipConfirm() }} label="Continue without email" />
+            </div>
+            :
+            <Link className="button-text-help" onClick={ () => { this.onEmailSkipClick() }} label="Do I have to?" />
+          }
         </form>
       </section>
     );
@@ -230,8 +248,8 @@ class CodeRequiredStage extends React.Component {
     return (
       <div>
         <section className="section-spaced">
-          <p>Access to LBRY is restricted as we build and scale the network.</p>
-          <p>There are two ways in:</p>
+          <p>Early access to LBRY is restricted as we build and scale the network.</p>
+          <p>There are two ways in.</p>
           <h3>Own LBRY Credits</h3>
           <p>If you own at least 1 LBC, you can get in right now.</p>
           <p style={{ textAlign: "center"}}><Link onClick={() => { setLocal('auth_bypassed', true); this.props.setStage(null); }}

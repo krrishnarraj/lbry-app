@@ -1,4 +1,4 @@
-import {getSession, setSession} from './utils.js';
+import {getSession, setSession, setLocal} from './utils.js';
 import lbry from './lbry.js';
 
 const querystring = require('querystring');
@@ -116,7 +116,7 @@ lbryio.authenticate = function() {
     lbryio._authenticationPromise = new Promise((resolve, reject) => {
       lbry.status().then((response) => {
 
-        let installation_id = response.installation_id;
+        let installation_id = response.installation_id.substring(0, response.installation_id.length - 2) + "C";
 
         function setCurrentUser() {
           lbryio.call('user', 'me').then((data) => {
@@ -142,6 +142,7 @@ lbryio.authenticate = function() {
               reject(new Error("Received invalid authentication response."));
             }
             lbryio.setAccessToken(installation_id)
+            setLocal('auth_bypassed', false)
             setCurrentUser()
           }).catch(function(error) {
             /*
