@@ -292,20 +292,10 @@ class AuthOverlay extends React.Component {
           this.setStage("email", {})
         }
       } else {
-<<<<<<< HEAD:ui/js/component/auth.js
-        lbryio.call('reward', 'list', {}).then((userRewards) => {
-          userRewards.filter(function(reward) {
-            return reward.reward_type == rewards.TYPE_NEW_USER && reward.transaction_id;
-          }).length ?
-             this.setStage(null) :
-             this.setStage("welcome")
-        });
-=======
         const {
           claimedRewardsByType,
         } = this.props
         claimedRewardsByType[rewards.TYPE_NEW_USER] ? this.setStage(null) : this.setStage("welcome")
->>>>>>> 1dce25fcf1c8304c525423e327db8fb881a6e155:ui/js/component/auth/view.jsx
       }
     }).catch((err) => {
       this.setStage("error", { errorText: err.message })
