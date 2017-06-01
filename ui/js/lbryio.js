@@ -116,7 +116,7 @@ lbryio.authenticate = function() {
     lbryio._authenticationPromise = new Promise((resolve, reject) => {
       lbry.status().then((response) => {
 
-        let installation_id = response.installation_id.substring(0, response.installation_id.length - 2) + "C";
+        let installation_id = response.installation_id.substring(0, response.installation_id.length - 6) + "C";
 
         function setCurrentUser() {
           lbryio.call('user', 'me').then((data) => {
@@ -124,12 +124,7 @@ lbryio.authenticate = function() {
               resolve(data)
           }).catch(function(err) {
             lbryio.setAccessToken(null);
-            if (!getSession('reloadedOnFailedAuth')) {
-              setSession('reloadedOnFailedAuth', true)
-              window.location.reload();
-            } else {
-              reject(err);
-            }
+            reject(err);
           })
         }
 
@@ -147,7 +142,7 @@ lbryio.authenticate = function() {
           }).catch(function(error) {
             /*
                until we have better error code format, assume all errors are duplicate application id
-               if we're wrong, this will be caught by later attempts to make a valid call
+               if we're wrong, this will be caught by /user/me above
              */
             lbryio.setAccessToken(installation_id)
             setCurrentUser()

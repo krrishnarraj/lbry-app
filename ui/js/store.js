@@ -15,6 +15,7 @@ import rewardsReducer from 'reducers/rewards'
 import searchReducer from 'reducers/search'
 import settingsReducer from 'reducers/settings'
 import walletReducer from 'reducers/wallet'
+import userReducer from 'reducers/user'
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -57,6 +58,7 @@ const reducers = redux.combineReducers({
   search: searchReducer,
   settings: settingsReducer,
   wallet: walletReducer,
+  user: userReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware()
