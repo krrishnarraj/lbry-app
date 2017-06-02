@@ -81,7 +81,7 @@ rewards.TYPE_FEATURED_DOWNLOAD = "featured_download";
 rewards.claimReward = function (type) {
 
   function requestReward(resolve, reject, params) {
-    if (!lbryio.enabled) {
+    if (!lbryio.enabled || !lbryio.getAccessToken()) {
       reject(new Error("Rewards are not enabled."))
       return;
     }
@@ -157,6 +157,9 @@ rewards.claimReward = function (type) {
 }
 
 rewards.claimEligiblePurchaseRewards = function() {
+  if (!lbryio.enabled || !lbryio.getAccessToken()) {
+    return;
+  }
   let types = {}
   types[rewards.TYPE_FIRST_STREAM] = false
   types[rewards.TYPE_FEATURED_DOWNLOAD] = false
