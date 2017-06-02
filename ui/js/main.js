@@ -17,9 +17,6 @@ import {
 import {
   toQueryString,
 } from 'util/query_params'
-import {
-  doFetchRewards,
-} from 'actions/rewards'
 
 const {remote, ipcRenderer, shell} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');

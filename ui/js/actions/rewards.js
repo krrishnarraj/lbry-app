@@ -1,9 +1,8 @@
 import * as types from 'constants/action_types'
-import lbry from 'lbry'
 import lbryio from 'lbryio';
 import rewards from 'rewards'
 
-export function doFetchRewards() {
+export function doRewardList() {
   return function(dispatch, getState) {
     const state = getState()
 
@@ -11,10 +10,15 @@ export function doFetchRewards() {
       type: types.FETCH_REWARDS_STARTED,
     })
 
-    lbryio.call('reward', 'list', {}).then(function(userRewards) {
+    lbryio.call('reward', 'list', {}).then((userRewards) => {
       dispatch({
         type: types.FETCH_REWARDS_COMPLETED,
         data: { userRewards }
+      })
+    }).catch(() => {
+      dispatch({
+        type: types.FETCH_REWARDS_COMPLETED,
+        data: { userRewards: [] }
       })
     });
   }
